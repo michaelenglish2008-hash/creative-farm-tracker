@@ -1,0 +1,1084 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Creative Farm Tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-deep:#0a0e1a;
+    --bg-rise:#0d1220;
+    --panel:#131a2b;
+    --panel-soft:#111726;
+    --border:rgba(255,255,255,0.07);
+    --border-soft:rgba(255,255,255,0.045);
+    --text:#e9ecf7;
+    --text-muted:#8791ac;
+    --text-faint:#5b6480;
+    --violet:#7c6cff;
+    --violet-soft:rgba(124,108,255,0.14);
+    --cyan:#28e0c4;
+    --cyan-soft:rgba(40,224,196,0.14);
+    --gold:#ffb84d;
+    --danger:#ff6b6b;
+    --shadow-lift: 0 10px 30px -12px rgba(0,0,0,0.55);
+  }
+
+  *{box-sizing:border-box;}
+
+  html,body{
+    margin:0;
+    padding:0;
+    background:
+      radial-gradient(1100px 600px at 15% -10%, rgba(124,108,255,0.10), transparent 60%),
+      radial-gradient(900px 500px at 100% 0%, rgba(40,224,196,0.06), transparent 55%),
+      var(--bg-deep);
+    color:var(--text);
+    font-family:'Inter',sans-serif;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+  }
+
+  ::selection{ background:var(--violet); color:#fff; }
+
+  button{ font-family:inherit; }
+
+  .wrap{
+    max-width:1040px;
+    margin:0 auto;
+    padding:48px 24px 80px;
+  }
+
+  /* ---------- Header ---------- */
+  .site-header{
+    display:flex;
+    align-items:flex-end;
+    justify-content:space-between;
+    gap:24px;
+    margin-bottom:36px;
+    flex-wrap:wrap;
+  }
+  .brand h1{
+    font-family:'Chakra Petch',sans-serif;
+    font-size:30px;
+    font-weight:700;
+    letter-spacing:0.2px;
+    margin:0 0 6px;
+    background:linear-gradient(90deg,#f2f3fb,#c9c3ff 65%,var(--violet));
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+  }
+  .brand p{
+    margin:0;
+    color:var(--text-muted);
+    font-size:14.5px;
+  }
+  .live-dot{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size:12.5px;
+    color:var(--cyan);
+    background:var(--cyan-soft);
+    border:1px solid rgba(40,224,196,0.25);
+    padding:6px 12px;
+    border-radius:100px;
+    font-weight:500;
+    white-space:nowrap;
+  }
+  .live-dot::before{
+    content:'';
+    width:7px;height:7px;border-radius:50%;
+    background:var(--cyan);
+    box-shadow:0 0 0 0 rgba(40,224,196,0.6);
+    animation:pulse 2.2s infinite;
+  }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(40,224,196,0.55); }
+    70%{ box-shadow:0 0 0 7px rgba(40,224,196,0); }
+    100%{ box-shadow:0 0 0 0 rgba(40,224,196,0); }
+  }
+
+  /* ---------- Reset hero banner ---------- */
+  .reset-hero{
+    position:relative;
+    overflow:hidden;
+    border-radius:20px;
+    border:1px solid var(--border);
+    background:linear-gradient(135deg, rgba(124,108,255,0.16), rgba(40,224,196,0.05) 60%, transparent), var(--panel);
+    padding:28px 32px;
+    margin-bottom:28px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:20px;
+    flex-wrap:wrap;
+    box-shadow:var(--shadow-lift);
+  }
+  .reset-hero::after{
+    content:'';
+    position:absolute;
+    inset:0;
+    background:radial-gradient(320px 200px at 88% 30%, rgba(124,108,255,0.28), transparent 70%);
+    pointer-events:none;
+  }
+  .reset-hero .label{
+    font-size:12.5px;
+    text-transform:uppercase;
+    letter-spacing:1.4px;
+    color:var(--text-muted);
+    margin:0 0 10px;
+    font-weight:500;
+  }
+  .reset-hero .countdown{
+    font-family:'Chakra Petch',sans-serif;
+    font-size:44px;
+    font-weight:700;
+    line-height:1;
+    letter-spacing:0.5px;
+    color:#fff;
+    text-shadow:0 0 30px rgba(124,108,255,0.35);
+  }
+  .reset-hero .sub{
+    margin-top:8px;
+    color:var(--text-faint);
+    font-size:13px;
+  }
+  .reset-hero .schedule{
+    text-align:right;
+    color:var(--text-muted);
+    font-size:13px;
+    max-width:220px;
+    z-index:1;
+  }
+  .reset-hero .schedule strong{
+    display:block;
+    color:var(--text);
+    font-size:14px;
+    margin-bottom:4px;
+  }
+
+  /* ---------- Section shell ---------- */
+  section.block{ margin-bottom:28px; }
+  .block-head{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    margin-bottom:14px;
+  }
+  .block-head h2{
+    font-family:'Chakra Petch',sans-serif;
+    font-size:16.5px;
+    font-weight:600;
+    margin:0;
+    color:var(--text);
+  }
+  .block-head .hint{
+    font-size:12.5px;
+    color:var(--text-faint);
+  }
+
+  /* ---------- Stat cards ---------- */
+  .stat-grid{
+    display:grid;
+    grid-template-columns:repeat(5,1fr);
+    gap:14px;
+  }
+  .stat-card{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:18px 18px 16px;
+    transition:border-color .2s ease, transform .2s ease;
+  }
+  .stat-card:hover{
+    border-color:rgba(124,108,255,0.35);
+    transform:translateY(-2px);
+  }
+  .stat-card .stat-label{
+    font-size:12px;
+    color:var(--text-muted);
+    margin-bottom:10px;
+    font-weight:500;
+  }
+  .stat-card .stat-value{
+    font-family:'Chakra Petch',sans-serif;
+    font-size:28px;
+    font-weight:700;
+    color:var(--text);
+    line-height:1;
+  }
+  .stat-card .stat-value.accent-cyan{ color:var(--cyan); }
+  .stat-card .stat-value.accent-gold{ color:var(--gold); }
+  .stat-card .stat-value.small{ font-size:20px; }
+  .stat-card .stat-foot{
+    margin-top:8px;
+    font-size:11.5px;
+    color:var(--text-faint);
+  }
+
+  /* ---------- Two column layout ---------- */
+  .cols-2{
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    gap:20px;
+    align-items:start;
+  }
+
+  .panel{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:18px;
+    padding:22px;
+  }
+
+  /* ---------- Form ---------- */
+  .form-row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:14px;
+    margin-bottom:16px;
+  }
+  .field label{
+    display:block;
+    font-size:12.5px;
+    color:var(--text-muted);
+    margin-bottom:8px;
+    font-weight:500;
+  }
+  .field input{
+    width:100%;
+    background:var(--bg-rise);
+    border:1px solid var(--border);
+    color:var(--text);
+    font-size:20px;
+    font-family:'Chakra Petch',sans-serif;
+    font-weight:600;
+    padding:12px 14px;
+    border-radius:12px;
+    outline:none;
+    transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  .field input:focus{
+    border-color:var(--violet);
+    box-shadow:0 0 0 3px var(--violet-soft);
+  }
+  .form-actions{
+    display:flex;
+    align-items:center;
+    gap:16px;
+  }
+  .btn-primary{
+    background:linear-gradient(135deg,var(--violet),#5b48e0);
+    color:#fff;
+    border:none;
+    padding:12px 22px;
+    border-radius:12px;
+    font-size:14.5px;
+    font-weight:600;
+    cursor:pointer;
+    box-shadow:0 8px 20px -8px rgba(124,108,255,0.6);
+    transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn-primary:hover{ transform:translateY(-1px); box-shadow:0 10px 24px -8px rgba(124,108,255,0.75); }
+  .btn-primary:active{ transform:translateY(0px) scale(0.98); }
+  .btn-primary:disabled{
+    opacity:0.35; cursor:not-allowed; box-shadow:none; transform:none;
+  }
+
+  .gain-pop{
+    font-family:'Chakra Petch',sans-serif;
+    font-weight:700;
+    font-size:19px;
+    color:var(--cyan);
+    opacity:0;
+    transform:translateY(6px);
+  }
+  .gain-pop.show{
+    animation:popIn 1.6s ease forwards;
+  }
+  @keyframes popIn{
+    0%{ opacity:0; transform:translateY(6px) scale(0.9); }
+    15%{ opacity:1; transform:translateY(0) scale(1.06); }
+    30%{ transform:translateY(0) scale(1); }
+    80%{ opacity:1; }
+    100%{ opacity:0; transform:translateY(-10px) scale(1); }
+  }
+
+  .form-note{
+    margin-top:14px;
+    font-size:12px;
+    color:var(--text-faint);
+  }
+
+  /* ---------- Weekly progress ---------- */
+  .week-row{
+    display:flex;
+    align-items:center;
+    gap:14px;
+    padding:11px 0;
+    border-bottom:1px solid var(--border-soft);
+  }
+  .week-row:last-child{ border-bottom:none; }
+  .week-row .week-name{
+    width:96px;
+    flex-shrink:0;
+    font-size:13.5px;
+    color:var(--text-muted);
+    font-weight:500;
+  }
+  .week-row.current .week-name{ color:var(--cyan); }
+  .week-row .week-bar-track{
+    flex:1;
+    height:8px;
+    background:var(--bg-rise);
+    border-radius:6px;
+    overflow:hidden;
+  }
+  .week-row .week-bar-fill{
+    height:100%;
+    border-radius:6px;
+    background:linear-gradient(90deg,var(--violet),var(--cyan));
+  }
+  .week-row .week-val{
+    width:74px;
+    text-align:right;
+    flex-shrink:0;
+    font-family:'Chakra Petch',sans-serif;
+    font-weight:700;
+    font-size:14.5px;
+    color:var(--text);
+  }
+  .week-summary{
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:10px;
+    margin-top:18px;
+    padding-top:16px;
+    border-top:1px solid var(--border-soft);
+  }
+  .week-summary .ws-item .ws-label{ font-size:11px; color:var(--text-faint); margin-bottom:4px; }
+  .week-summary .ws-item .ws-value{ font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:16px; }
+
+  /* ---------- Statistics ---------- */
+  .stat-mini-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:12px;
+    margin-bottom:20px;
+  }
+  .mini-stat{
+    background:var(--panel-soft);
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:13px 14px;
+  }
+  .mini-stat .ms-label{ font-size:11.5px; color:var(--text-faint); margin-bottom:6px; }
+  .mini-stat .ms-value{ font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:18px; }
+
+  .chart-wrap{
+    background:var(--panel-soft);
+    border:1px solid var(--border-soft);
+    border-radius:14px;
+    padding:16px 16px 8px;
+  }
+  .chart-wrap .chart-title{
+    font-size:12px;
+    color:var(--text-faint);
+    margin-bottom:10px;
+  }
+
+  /* ---------- Projection ---------- */
+  .projection-lead{
+    display:flex;
+    align-items:baseline;
+    gap:12px;
+    margin-bottom:18px;
+  }
+  .projection-lead .p-val{
+    font-family:'Chakra Petch',sans-serif;
+    font-weight:700;
+    font-size:34px;
+    color:var(--gold);
+  }
+  .projection-lead .p-label{
+    font-size:13px;
+    color:var(--text-muted);
+  }
+  .proj-grid{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:10px;
+  }
+  .proj-card{
+    background:var(--panel-soft);
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:14px;
+    text-align:center;
+  }
+  .proj-card .pc-label{ font-size:11.5px; color:var(--text-faint); margin-bottom:6px; }
+  .proj-card .pc-value{ font-family:'Chakra Petch',sans-serif; font-weight:700; font-size:19px; color:var(--cyan); }
+  .empty-note{
+    color:var(--text-faint);
+    font-size:13.5px;
+    padding:8px 0;
+  }
+
+  /* ---------- History ---------- */
+  .history-list{ display:flex; flex-direction:column; gap:8px; }
+  .history-row{
+    display:flex;
+    align-items:center;
+    gap:16px;
+    background:var(--panel-soft);
+    border:1px solid var(--border-soft);
+    border-radius:12px;
+    padding:13px 16px;
+    transition:border-color .15s ease;
+  }
+  .history-row:hover{ border-color:rgba(124,108,255,0.3); }
+  .history-row .h-date{
+    width:150px;
+    flex-shrink:0;
+    font-size:13px;
+    color:var(--text-muted);
+  }
+  .history-row .h-date .h-time{ color:var(--text-faint); font-size:11.5px; display:block; margin-top:2px; }
+  .history-row .h-levels{
+    flex:1;
+    font-family:'Chakra Petch',sans-serif;
+    font-size:15px;
+    font-weight:600;
+    color:var(--text);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .history-row .h-levels .arrow{ color:var(--text-faint); font-weight:400; }
+  .history-row .h-gain{
+    font-family:'Chakra Petch',sans-serif;
+    font-weight:700;
+    font-size:15px;
+    color:var(--cyan);
+    width:60px;
+    text-align:right;
+    flex-shrink:0;
+  }
+  .history-row .h-del{
+    background:none;
+    border:none;
+    color:var(--text-faint);
+    cursor:pointer;
+    font-size:16px;
+    padding:4px 6px;
+    border-radius:8px;
+    transition:color .15s ease, background .15s ease;
+    flex-shrink:0;
+  }
+  .history-row .h-del:hover{ color:var(--danger); background:rgba(255,107,107,0.1); }
+  .history-scroll{
+    max-height:360px;
+    overflow-y:auto;
+    padding-right:4px;
+  }
+  .history-scroll::-webkit-scrollbar{ width:6px; }
+  .history-scroll::-webkit-scrollbar-thumb{ background:rgba(255,255,255,0.1); border-radius:6px; }
+
+  /* ---------- Footer ---------- */
+  .site-footer{
+    margin-top:36px;
+    display:flex;
+    justify-content:center;
+  }
+  .clear-link{
+    background:none;
+    border:none;
+    color:var(--text-faint);
+    font-size:12.5px;
+    cursor:pointer;
+    padding:8px 14px;
+    border-radius:8px;
+    transition:color .15s ease, background .15s ease;
+  }
+  .clear-link:hover{ color:var(--danger); background:rgba(255,107,107,0.08); }
+
+  /* ---------- Confirm modal ---------- */
+  .modal-backdrop{
+    position:fixed; inset:0;
+    background:rgba(4,6,14,0.6);
+    backdrop-filter:blur(3px);
+    display:flex; align-items:center; justify-content:center;
+    z-index:50;
+    opacity:0; pointer-events:none;
+    transition:opacity .18s ease;
+  }
+  .modal-backdrop.open{ opacity:1; pointer-events:auto; }
+  .modal-box{
+    background:var(--panel);
+    border:1px solid var(--border);
+    border-radius:16px;
+    padding:24px;
+    width:320px;
+    box-shadow:var(--shadow-lift);
+    transform:translateY(8px);
+    transition:transform .18s ease;
+  }
+  .modal-backdrop.open .modal-box{ transform:translateY(0); }
+  .modal-box h3{ margin:0 0 8px; font-family:'Chakra Petch',sans-serif; font-size:16px; }
+  .modal-box p{ margin:0 0 20px; font-size:13.5px; color:var(--text-muted); line-height:1.5; }
+  .modal-actions{ display:flex; gap:10px; justify-content:flex-end; }
+  .modal-actions button{
+    border:none; border-radius:10px; padding:9px 16px; font-size:13px; cursor:pointer; font-weight:500;
+  }
+  .modal-cancel{ background:var(--bg-rise); color:var(--text-muted); }
+  .modal-confirm{ background:var(--danger); color:#fff; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width: 860px){
+    .cols-2{ grid-template-columns:1fr; }
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .stat-mini-grid{ grid-template-columns:repeat(2,1fr); }
+    .proj-grid{ grid-template-columns:repeat(3,1fr); }
+    .reset-hero{ flex-direction:column; align-items:flex-start; }
+    .reset-hero .schedule{ text-align:left; }
+  }
+  @media (max-width: 480px){
+    .wrap{ padding:32px 16px 60px; }
+    .stat-grid{ grid-template-columns:repeat(2,1fr); }
+    .form-row{ grid-template-columns:1fr; }
+    .week-summary{ grid-template-columns:repeat(2,1fr); }
+    .history-row{ flex-wrap:wrap; }
+    .history-row .h-date{ width:auto; }
+    .reset-hero .countdown{ font-size:34px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="site-header">
+    <div class="brand">
+      <h1>Creative Farm Tracker</h1>
+      <p>Track your Creative XP progress.</p>
+    </div>
+    <div class="live-dot">Saved locally on this device</div>
+  </header>
+
+  <div class="reset-hero">
+    <div>
+      <p class="label">Next Creative Reset</p>
+      <div class="countdown" id="heroCountdown">—</div>
+      <p class="sub">Weekly XP limit refreshes every Thursday</p>
+    </div>
+    <div class="schedule">
+      <strong>Reset schedule</strong>
+      Thursdays at 09:00, local time
+    </div>
+  </div>
+
+  <section class="block">
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-label">Current Level</div>
+        <div class="stat-value" id="statCurrentLevel">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Levels Today</div>
+        <div class="stat-value accent-cyan" id="statLevelsToday">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Levels This Week</div>
+        <div class="stat-value accent-cyan" id="statLevelsWeek">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Weekly Average</div>
+        <div class="stat-value accent-gold" id="statWeeklyAvg">—</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-label">Next Reset</div>
+        <div class="stat-value small" id="statNextReset">—</div>
+      </div>
+    </div>
+  </section>
+
+  <div class="cols-2">
+    <section class="block">
+      <div class="panel">
+        <div class="block-head">
+          <h2>New Farm Session</h2>
+          <span class="hint">Enter your level before and after farming</span>
+        </div>
+        <form id="sessionForm">
+          <div class="form-row">
+            <div class="field">
+              <label for="levelBefore">Level Before</label>
+              <input type="number" id="levelBefore" min="0" step="1" placeholder="e.g. 180" required>
+            </div>
+            <div class="field">
+              <label for="levelAfter">Level After</label>
+              <input type="number" id="levelAfter" min="0" step="1" placeholder="e.g. 193" required>
+            </div>
+          </div>
+          <div class="form-actions">
+            <button type="submit" class="btn-primary" id="addBtn">Add Session</button>
+            <span class="gain-pop" id="gainPop"></span>
+          </div>
+          <p class="form-note" id="formNote">Levels gained = Level After − Level Before</p>
+        </form>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="panel">
+        <div class="block-head">
+          <h2>Weekly Progress</h2>
+        </div>
+        <div id="weekList"></div>
+        <div class="week-summary" id="weekSummary"></div>
+      </div>
+    </section>
+  </div>
+
+  <div class="cols-2">
+    <section class="block">
+      <div class="panel">
+        <div class="block-head">
+          <h2>Statistics</h2>
+        </div>
+        <div class="stat-mini-grid" id="statMiniGrid"></div>
+        <div class="chart-wrap">
+          <div class="chart-title">Levels gained per day — last 14 days</div>
+          <div id="chartHost"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="panel">
+        <div class="block-head">
+          <h2>Projection</h2>
+        </div>
+        <div id="projectionHost"></div>
+      </div>
+    </section>
+  </div>
+
+  <section class="block">
+    <div class="panel">
+      <div class="block-head">
+        <h2>Farm History</h2>
+        <span class="hint" id="historyCount"></span>
+      </div>
+      <div class="history-scroll">
+        <div class="history-list" id="historyList"></div>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <button class="clear-link" id="clearDataBtn">Clear All Data</button>
+  </footer>
+
+</div>
+
+<div class="modal-backdrop" id="modalBackdrop">
+  <div class="modal-box">
+    <h3>Clear all data?</h3>
+    <p>This deletes every farm session stored on this device. This cannot be undone.</p>
+    <div class="modal-actions">
+      <button class="modal-cancel" id="modalCancel">Cancel</button>
+      <button class="modal-confirm" id="modalConfirm">Clear everything</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+
+  var STORAGE_KEY = "cft_sessions_v1";
+  var SEEDED_KEY = "cft_seeded_v1";
+  var MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  var WEEKDAY_RESET = 4; // Thursday (0=Sun)
+  var RESET_HOUR = 9;
+
+  // ---------------- Storage ----------------
+  function loadSessions(){
+    try{
+      var raw = localStorage.getItem(STORAGE_KEY);
+      if(!raw) return [];
+      var parsed = JSON.parse(raw);
+      if(!Array.isArray(parsed)) return [];
+      return parsed;
+    }catch(e){
+      return [];
+    }
+  }
+
+  function saveSessions(sessions){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(sessions));
+  }
+
+  function seedIfNeeded(){
+    var alreadySeeded = localStorage.getItem(SEEDED_KEY);
+    var existing = loadSessions();
+    if(alreadySeeded || existing.length){ return; }
+
+    var now = new Date();
+    var demo = [];
+    var demoLevel = 118;
+
+    // Build demo sessions spanning the last ~24 days with varied gains
+    var offsets = [23,22,20,18,16,15,13,11,9,8,6,4,3,1,0];
+    var gains =   [9, 7, 11,6, 8, 5, 12,7, 9, 6, 10,8, 6, 5, 4];
+
+    for(var i=0;i<offsets.length;i++){
+      var d = new Date(now);
+      d.setDate(d.getDate() - offsets[i]);
+      d.setHours(14 + (i % 5), 10 + (i*7)%50, 0, 0);
+      var before = demoLevel;
+      var after = before + gains[i];
+      demoLevel = after;
+      demo.push({
+        id: "seed_" + i,
+        before: before,
+        after: after,
+        gained: gains[i],
+        timestamp: d.getTime()
+      });
+    }
+
+    demo.sort(function(a,b){ return a.timestamp - b.timestamp; });
+    saveSessions(demo);
+    localStorage.setItem(SEEDED_KEY, "1");
+  }
+
+  // ---------------- Date / week helpers ----------------
+  function pad(n){ return n < 10 ? "0"+n : ""+n; }
+
+  function formatDateTimeFull(ts){
+    var d = new Date(ts);
+    return MONTHS[d.getMonth()] + " " + d.getDate() + ", " + d.getFullYear() + " — " + pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  function formatDateShort(ts){
+    var d = new Date(ts);
+    return MONTHS[d.getMonth()] + " " + d.getDate();
+  }
+
+  function formatTimeShort(ts){
+    var d = new Date(ts);
+    return pad(d.getHours()) + ":" + pad(d.getMinutes());
+  }
+
+  function isSameCalendarDay(ts, ref){
+    var a = new Date(ts), b = new Date(ref);
+    return a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate();
+  }
+
+  // Returns the timestamp (ms) of the start of the "creative week" containing `date`.
+  // Week starts every Thursday at 09:00 local time.
+  function getWeekStart(date){
+    var d = new Date(date.getFullYear(), date.getMonth(), date.getDate(), RESET_HOUR, 0, 0, 0);
+    var day = date.getDay();
+    var diff = (day - WEEKDAY_RESET + 7) % 7;
+    d.setDate(d.getDate() - diff);
+    if(d.getTime() > date.getTime()){
+      d.setDate(d.getDate() - 7);
+    }
+    return d.getTime();
+  }
+
+  function getNextReset(date){
+    return getWeekStart(date) + 7*24*60*60*1000;
+  }
+
+  function formatCountdown(ms){
+    if(ms < 0) ms = 0;
+    var totalMinutes = Math.floor(ms / 60000);
+    var days = Math.floor(totalMinutes / (60*24));
+    var hours = Math.floor((totalMinutes % (60*24)) / 60);
+    var minutes = totalMinutes % 60;
+    return days + "d " + hours + "h " + minutes + "m";
+  }
+
+  // ---------------- Derived data ----------------
+  function buildWeeks(sessions){
+    // Map weekStart(ms) -> total gained
+    var map = {};
+    sessions.forEach(function(s){
+      var ws = getWeekStart(new Date(s.timestamp));
+      map[ws] = (map[ws] || 0) + s.gained;
+    });
+    var keys = Object.keys(map).map(Number).sort(function(a,b){ return a-b; });
+    return keys.map(function(k, idx){
+      return { weekStart: k, index: idx+1, total: map[k] };
+    });
+  }
+
+  function render(){
+    var sessions = loadSessions().slice().sort(function(a,b){ return a.timestamp - b.timestamp; });
+    var now = new Date();
+    var currentWeekStart = getWeekStart(now);
+
+    // ----- Current level -----
+    var currentLevel = sessions.length ? sessions[sessions.length-1].after : "—";
+    document.getElementById("statCurrentLevel").textContent = currentLevel;
+
+    // ----- Levels today -----
+    var levelsToday = sessions.filter(function(s){ return isSameCalendarDay(s.timestamp, now.getTime()); })
+                               .reduce(function(sum,s){ return sum + s.gained; }, 0);
+    document.getElementById("statLevelsToday").textContent = (levelsToday>0? "+":"") + levelsToday;
+
+    // ----- Levels this week -----
+    var levelsThisWeek = sessions.filter(function(s){ return getWeekStart(new Date(s.timestamp)) === currentWeekStart; })
+                                  .reduce(function(sum,s){ return sum + s.gained; }, 0);
+    document.getElementById("statLevelsWeek").textContent = (levelsThisWeek>0? "+":"") + levelsThisWeek;
+
+    // ----- Weeks -----
+    var weeks = buildWeeks(sessions);
+    var weeklyAvg = weeks.length ? Math.round(weeks.reduce(function(s,w){return s+w.total;},0) / weeks.length) : 0;
+    document.getElementById("statWeeklyAvg").textContent = weeks.length ? ("+"+weeklyAvg) : "—";
+
+    // ----- Countdown -----
+    var nextReset = getNextReset(now);
+    var countdownStr = formatCountdown(nextReset - now.getTime());
+    document.getElementById("heroCountdown").textContent = countdownStr;
+    document.getElementById("statNextReset").textContent = countdownStr;
+
+    // ----- Weekly progress list -----
+    var weekListEl = document.getElementById("weekList");
+    weekListEl.innerHTML = "";
+    if(!weeks.length){
+      weekListEl.innerHTML = '<p class="empty-note">No sessions logged yet — add your first one to start tracking weekly progress.</p>';
+    } else {
+      var maxWeek = Math.max.apply(null, weeks.map(function(w){return w.total;}));
+      weeks.slice().reverse().forEach(function(w){
+        var isCurrent = w.weekStart === currentWeekStart;
+        var row = document.createElement("div");
+        row.className = "week-row" + (isCurrent ? " current" : "");
+        var pct = maxWeek ? Math.max(6, Math.round((w.total/maxWeek)*100)) : 0;
+        row.innerHTML =
+          '<div class="week-name">Week ' + w.index + (isCurrent ? " · now" : "") + '</div>' +
+          '<div class="week-bar-track"><div class="week-bar-fill" style="width:'+pct+'%"></div></div>' +
+          '<div class="week-val">+' + w.total + '</div>';
+        weekListEl.appendChild(row);
+      });
+
+      var totalAll = weeks.reduce(function(s,w){return s+w.total;},0);
+      var best = weeks.reduce(function(b,w){ return w.total > b.total ? w : b; }, weeks[0]);
+      var summaryEl = document.getElementById("weekSummary");
+      summaryEl.innerHTML =
+        '<div class="ws-item"><div class="ws-label">Total levels</div><div class="ws-value">'+totalAll+'</div></div>' +
+        '<div class="ws-item"><div class="ws-label">Avg / week</div><div class="ws-value">'+weeklyAvg+'</div></div>' +
+        '<div class="ws-item"><div class="ws-label">Best week</div><div class="ws-value">+'+best.total+'</div></div>' +
+        '<div class="ws-item"><div class="ws-label">Current week</div><div class="ws-value">Week '+ (weeks[weeks.length-1] ? weeks[weeks.length-1].index : "—") +'</div></div>';
+    }
+
+    // ----- Statistics mini grid -----
+    var totalSessions = sessions.length;
+    var totalGained = sessions.reduce(function(s,x){return s+x.gained;},0);
+    var avgPerSession = totalSessions ? Math.round((totalGained/totalSessions)*10)/10 : 0;
+    var bestSession = sessions.reduce(function(b,s){ return (!b || s.gained > b.gained) ? s : b; }, null);
+
+    var miniGrid = document.getElementById("statMiniGrid");
+    miniGrid.innerHTML =
+      '<div class="mini-stat"><div class="ms-label">Total sessions</div><div class="ms-value">'+totalSessions+'</div></div>' +
+      '<div class="mini-stat"><div class="ms-label">Total levels gained</div><div class="ms-value">'+totalGained+'</div></div>' +
+      '<div class="mini-stat"><div class="ms-label">Avg / session</div><div class="ms-value">'+avgPerSession+'</div></div>' +
+      '<div class="mini-stat"><div class="ms-label">Best session</div><div class="ms-value">'+(bestSession? "+"+bestSession.gained : "—")+'</div></div>' +
+      '<div class="mini-stat"><div class="ms-label">Gained today</div><div class="ms-value">'+(levelsToday>0?"+":"")+levelsToday+'</div></div>' +
+      '<div class="mini-stat"><div class="ms-label">Gained this week</div><div class="ms-value">'+(levelsThisWeek>0?"+":"")+levelsThisWeek+'</div></div>';
+
+    renderChart(sessions, now);
+
+    // ----- Projection -----
+    var projHost = document.getElementById("projectionHost");
+    if(totalSessions < 3 || weeks.length < 1){
+      projHost.innerHTML = '<p class="empty-note">Not enough data yet — log a few more sessions to unlock a projection.</p>';
+    } else {
+      var avg = weeklyAvg;
+      projHost.innerHTML =
+        '<div class="projection-lead"><span class="p-val">+'+avg+'</span><span class="p-label">expected next week, based on your average</span></div>' +
+        '<div class="proj-grid">' +
+          '<div class="proj-card"><div class="pc-label">1 Week</div><div class="pc-value">+'+avg+'</div></div>' +
+          '<div class="proj-card"><div class="pc-label">2 Weeks</div><div class="pc-value">+'+(avg*2)+'</div></div>' +
+          '<div class="proj-card"><div class="pc-label">4 Weeks</div><div class="pc-value">+'+(avg*4)+'</div></div>' +
+        '</div>';
+    }
+
+    // ----- History -----
+    var historyEl = document.getElementById("historyList");
+    var descending = sessions.slice().reverse();
+    document.getElementById("historyCount").textContent = descending.length ? (descending.length + " sessions") : "";
+    if(!descending.length){
+      historyEl.innerHTML = '<p class="empty-note">Your farm sessions will show up here once you add one.</p>';
+    } else {
+      historyEl.innerHTML = "";
+      descending.forEach(function(s){
+        var row = document.createElement("div");
+        row.className = "history-row";
+        row.innerHTML =
+          '<div class="h-date">'+formatDateShort(s.timestamp)+'<span class="h-time">'+formatTimeShort(s.timestamp)+'</span></div>' +
+          '<div class="h-levels">'+s.before+' <span class="arrow">→</span> '+s.after+'</div>' +
+          '<div class="h-gain">+'+s.gained+'</div>' +
+          '<button class="h-del" title="Delete session" data-id="'+s.id+'">✕</button>';
+        historyEl.appendChild(row);
+      });
+    }
+  }
+
+  // ---------------- Chart ----------------
+  function renderChart(sessions, now){
+    var host = document.getElementById("chartHost");
+    var days = [];
+    for(var i=13;i>=0;i--){
+      var d = new Date(now);
+      d.setDate(d.getDate()-i);
+      d.setHours(0,0,0,0);
+      days.push({ date:d, total:0 });
+    }
+    sessions.forEach(function(s){
+      var d = new Date(s.timestamp);
+      d.setHours(0,0,0,0);
+      var dt = d.getTime();
+      for(var j=0;j<days.length;j++){
+        if(days[j].date.getTime() === dt){ days[j].total += s.gained; break; }
+      }
+    });
+
+    var w = 620, h = 130, padBottom = 18, padTop = 6;
+    var barGap = 6;
+    var barWidth = (w / days.length) - barGap;
+    var maxVal = Math.max.apply(null, days.map(function(d){return d.total;}));
+    if(maxVal <= 0) maxVal = 1;
+
+    var svg = '<svg viewBox="0 0 '+w+' '+(h+padBottom)+'" width="100%" preserveAspectRatio="none" style="display:block;">';
+    days.forEach(function(day, idx){
+      var barH = Math.round((day.total / maxVal) * (h - padTop));
+      if(day.total === 0) barH = 2;
+      var x = idx * (barWidth + barGap);
+      var y = h - barH;
+      var isToday = idx === days.length - 1;
+      var fill = isToday ? "url(#gradToday)" : "url(#gradBar)";
+      svg += '<rect x="'+x+'" y="'+y+'" width="'+barWidth+'" height="'+barH+'" rx="3" fill="'+fill+'"></rect>';
+    });
+    svg += '<defs>' +
+      '<linearGradient id="gradBar" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="#7c6cff"/>' +
+        '<stop offset="100%" stop-color="#3a2f8f"/>' +
+      '</linearGradient>' +
+      '<linearGradient id="gradToday" x1="0" y1="0" x2="0" y2="1">' +
+        '<stop offset="0%" stop-color="#28e0c4"/>' +
+        '<stop offset="100%" stop-color="#137a6b"/>' +
+      '</linearGradient>' +
+    '</defs>';
+    svg += '</svg>';
+    host.innerHTML = svg;
+  }
+
+  // ---------------- Interactions ----------------
+  function handleAddSession(e){
+    e.preventDefault();
+    var beforeEl = document.getElementById("levelBefore");
+    var afterEl = document.getElementById("levelAfter");
+    var note = document.getElementById("formNote");
+
+    var before = parseInt(beforeEl.value, 10);
+    var after = parseInt(afterEl.value, 10);
+
+    if(isNaN(before) || isNaN(after)){
+      note.textContent = "Enter both levels to add a session.";
+      note.style.color = "var(--danger)";
+      return;
+    }
+    if(after < before){
+      note.textContent = "Level After must be greater than or equal to Level Before.";
+      note.style.color = "var(--danger)";
+      return;
+    }
+
+    var gained = after - before;
+    var sessions = loadSessions();
+    sessions.push({
+      id: "s_" + Date.now() + "_" + Math.floor(Math.random()*1000),
+      before: before,
+      after: after,
+      gained: gained,
+      timestamp: Date.now()
+    });
+    saveSessions(sessions);
+
+    note.style.color = "";
+    note.textContent = "Levels gained = Level After − Level Before";
+    beforeEl.value = "";
+    afterEl.value = "";
+
+    var pop = document.getElementById("gainPop");
+    pop.textContent = "+" + gained + " LEVELS";
+    pop.classList.remove("show");
+    void pop.offsetWidth; // restart animation
+    pop.classList.add("show");
+
+    render();
+  }
+
+  function handleHistoryClick(e){
+    var btn = e.target.closest(".h-del");
+    if(!btn) return;
+    var id = btn.getAttribute("data-id");
+    var sessions = loadSessions().filter(function(s){ return s.id !== id; });
+    saveSessions(sessions);
+    render();
+  }
+
+  function openModal(){ document.getElementById("modalBackdrop").classList.add("open"); }
+  function closeModal(){ document.getElementById("modalBackdrop").classList.remove("open"); }
+
+  function handleClearAll(){
+    localStorage.setItem(STORAGE_KEY, JSON.stringify([]));
+    localStorage.setItem(SEEDED_KEY, "1");
+    closeModal();
+    render();
+  }
+
+  // ---------------- Init ----------------
+  function init(){
+    seedIfNeeded();
+    render();
+
+    document.getElementById("sessionForm").addEventListener("submit", handleAddSession);
+    document.getElementById("historyList").addEventListener("click", handleHistoryClick);
+    document.getElementById("clearDataBtn").addEventListener("click", openModal);
+    document.getElementById("modalCancel").addEventListener("click", closeModal);
+    document.getElementById("modalConfirm").addEventListener("click", handleClearAll);
+    document.getElementById("modalBackdrop").addEventListener("click", function(e){
+      if(e.target === this) closeModal();
+    });
+
+    setInterval(function(){
+      var now = new Date();
+      var nextReset = getNextReset(now);
+      var countdownStr = formatCountdown(nextReset - now.getTime());
+      document.getElementById("heroCountdown").textContent = countdownStr;
+      document.getElementById("statNextReset").textContent = countdownStr;
+
+      // Full re-render once per hour boundary to keep today/week buckets fresh
+      if(now.getMinutes() === 0 && now.getSeconds() < 30){
+        render();
+      }
+    }, 30000);
+  }
+
+  document.addEventListener("DOMContentLoaded", init);
+})();
+</script>
+
+</body>
+</html>
